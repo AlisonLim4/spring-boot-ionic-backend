@@ -13,38 +13,40 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 
 import com.alisonlima.cursomc.domain.enums.TipoCliente;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-public class Cliente implements Serializable{
+public class Cliente implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
 	private String email;
 	private String cpfOuCnpj;
 	private Integer tipo;
-	
+
 	@JsonManagedReference
 	@OneToMany(mappedBy = "cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
-	
-	/*Obs: Foi escolhido utilizar uma coleção de telefones ao inves
-	da Implementação da classe, por ser uma classe muito simples.
-	foi escolhido o tipo Set, que é um conjunto, ao inves do tipo List.
-	pois o Set nao aceita repetições e assim resolve bem o problema atual.
-	*/
+
+	/*
+	 * Obs: Foi escolhido utilizar uma coleção de telefones ao inves da
+	 * Implementação da classe, por ser uma classe muito simples. foi escolhido o
+	 * tipo Set, que é um conjunto, ao inves do tipo List. pois o Set nao aceita
+	 * repetições e assim resolve bem o problema atual.
+	 */
 	@ElementCollection
-	@CollectionTable(name="TELEFONE")
+	@CollectionTable(name = "TELEFONE")
 	private Set<String> telefones = new HashSet<>();
+
+	@OneToMany(mappedBy = "cliente")
+	private List<Pedido> pedidos = new ArrayList<>();
 
 	// Construtor padrao.
 	public Cliente() {
@@ -101,7 +103,6 @@ public class Cliente implements Serializable{
 	public void setTipo(TipoCliente tipo) {
 		this.tipo = tipo.getCod();
 	}
-	
 
 	public Set<String> getTelefones() {
 		return telefones;
@@ -117,6 +118,14 @@ public class Cliente implements Serializable{
 
 	public void setTelefones(Set<String> telefones) {
 		this.telefones = telefones;
+	}
+
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
+	public void setPedidos(List<Pedido> pedidos) {
+	this.pedidos = pedidos;
 	}
 
 	// hash e equals
