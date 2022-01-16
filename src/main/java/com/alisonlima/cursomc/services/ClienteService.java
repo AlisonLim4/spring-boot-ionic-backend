@@ -16,7 +16,7 @@ public class ClienteService {
 	private ClienteRepository repo;
 
 	// metodo de busca
-	public Cliente buscar(Integer id) {
+	public Cliente find(Integer id) {
 		Optional<Cliente> obj = repo.findById(id);
 
 		return obj.orElseThrow(() -> new com.alisonlima.cursomc.services.exceptions.ObjectNotFoundException(
